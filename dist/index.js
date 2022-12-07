@@ -42,7 +42,7 @@ const core = __importStar(__nccwpck_require__(2186));
 const exec = __importStar(__nccwpck_require__(1514));
 const github = __importStar(__nccwpck_require__(5438));
 const strip_ansi_1 = __importDefault(__nccwpck_require__(8770));
-// import fs from 'fs'
+const fs_1 = __importDefault(__nccwpck_require__(7147));
 function format(output) {
     const ret = ['**The container image has inefficient files.**'];
     let summarySection = false;
@@ -87,28 +87,23 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const image = core.getInput('image');
-            // const configFile = core.getInput('config-file')
+            const configFile = core.getInput('config-file');
             const diveVersion = core.getInput('config-file') || 'v0.9';
             const diveImage = `wagoodman/dive:${diveVersion}`;
             yield exec.exec('docker', ['pull', diveImage]);
             const commandOptions = [
                 '-e',
                 'CI=true',
-                '-e',
-                'DOCKER_API_VERSION=1.37',
                 '--rm',
                 '-v',
                 '/var/run/docker.sock:/var/run/docker.sock'
             ];
-            // if (fs.existsSync(configFile)) {
-            //   commandOptions.push(
-            //     '--mount',
-            //     `type=bind,source=${configFile},target=/.dive-ci`,
-            //     '--ci-config',
-            //     '/.dive-ci'
-            //   )
-            // }
-            const parameters = ['run', ...commandOptions, diveImage, image];
+            const postCommandOptions = [];
+            if (fs_1.default.existsSync(configFile)) {
+                commandOptions.push('--mount', `type=bind,source=${configFile},target=/.dive-ci`);
+                postCommandOptions.push('--ci-config', '/.dive-ci');
+            }
+            const parameters = ['run', ...commandOptions, diveImage, image, ...postCommandOptions];
             let output = '';
             const execOptions = {
                 ignoreReturnCode: true,

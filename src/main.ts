@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 import * as github from '@actions/github'
 import stripAnsi from 'strip-ansi'
-// import fs from 'fs'
+import fs from 'fs'
 
 function format(output: string): string {
   const ret = ['**The container image has inefficient files.**']
@@ -46,7 +46,7 @@ function format(output: string): string {
 async function run(): Promise<void> {
   try {
     const image = core.getInput('image')
-    // const configFile = core.getInput('config-file')
+    const configFile = core.getInput('config-file')
     const diveVersion = core.getInput('config-file') || 'v0.9'
 
     const diveImage = `wagoodman/dive:${diveVersion}`
@@ -55,23 +55,28 @@ async function run(): Promise<void> {
     const commandOptions = [
       '-e',
       'CI=true',
-      '-e',
-      'DOCKER_API_VERSION=1.37',
       '--rm',
       '-v',
       '/var/run/docker.sock:/var/run/docker.sock'
     ]
 
-    // if (fs.existsSync(configFile)) {
-    //   commandOptions.push(
-    //     '--mount',
-    //     `type=bind,source=${configFile},target=/.dive-ci`,
-    //     '--ci-config',
-    //     '/.dive-ci'
-    //   )
-    // }
+    const postCommandOptions = []
 
-    const parameters = ['run', ...commandOptions, diveImage, image]
+    if (fs.existsSync(configFile)) {
+      commandOptions.push(
+        '--mount',
+        `type=bind,source=${configFile},target=/.dive-ci`
+      )
+      postCommandOptions.push('--ci-config', '/.dive-ci')
+    }
+
+    const parameters = [
+      'run',
+      ...commandOptions,
+      diveImage,
+      image,
+      ...postCommandOptions
+    ]
     let output = ''
     const execOptions = {
       ignoreReturnCode: true,
