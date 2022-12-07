@@ -36,7 +36,7 @@ jobs:
       - name: Build image
         run: docker build -t sample:latest .
       - name: Dive
-        uses: yuichielectric/dive-action@0.0.4
+        uses: konstankinollc/dive-action@0.0.4
         with:
           image: "sample:latest"
           config-file: ${{ github.workspace }}/.dive-ci.yml
@@ -131,9 +131,9 @@ Result:FAIL [Total:3] [Passed:2] [Failed:1] [Warn:0] [Skipped:0]
 ##[error]Process completed with exit code 1.
 ```
 
-[release]: https://github.com/yuichielectric/dive-action/releases/latest
-[release-badge]: https://img.shields.io/github/release/yuichielectric/dive-action.svg?logo=github&color=green
+[release]: https://github.com/konstankinollc/dive-action/releases/latest
+[release-badge]: https://img.shields.io/github/release/konstankinollc/dive-action.svg?logo=github&color=green
 [marketplace]: https://github.com/marketplace/actions/dive-action
 [marketplace-badge]: https://img.shields.io/badge/marketplace-dive--action-green?logo=github
-[license]: https://github.com/yuichielectric/dive-action/blob/master/LICENSE
-[license-badge]: https://img.shields.io/github/license/yuichielectric/dive-action.svg
+[license]: https://github.com/konstankinollc/dive-action/blob/master/LICENSE
+[license-badge]: https://img.shields.io/github/license/konstankinollc/dive-action.svg
