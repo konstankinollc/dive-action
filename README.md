@@ -18,6 +18,7 @@ dive action is an action that allows developers who develop Docker image to run 
 | image        | String | true     |                                      | Image to analyze                                                             |
 | config-file  | String | false    | `${{ github.workspace }}/.dive.yaml` | Path to [dive config file](https://github.com/wagoodman/dive#ci-integration) |
 | github-token | String | false    |                                      | GitHub token to post PR comment on dive failure                              |
+| dive-version | String | false    | "v0.9"                               | Dive version to use                                                          |
 
 ### Workflow
 
@@ -36,7 +37,7 @@ jobs:
       - name: Build image
         run: docker build -t sample:latest .
       - name: Dive
-        uses: konstankinollc/dive-action@0.0.4
+        uses: konstankinollc/dive-action@v0.1
         with:
           image: "sample:latest"
           config-file: ${{ github.workspace }}/.dive-ci.yml

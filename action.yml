@@ -14,7 +14,11 @@ inputs:
     default: ${{ github.workspace }}/.dive.yaml
   github-token:
     description: "GitHub Token to post PR comment"
-    required: true
+    required: false
+  dive-version:
+    description: "Dive version to use"
+    required: false
+    default: "v0.10.0"
 runs:
   using: "node12"
   main: "dist/index.js"
