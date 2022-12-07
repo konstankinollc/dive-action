@@ -47,7 +47,7 @@ async function run(): Promise<void> {
   try {
     const image = core.getInput('image')
     const configFile = core.getInput('config-file')
-    const diveVersion = core.getInput('config-file') || 'v0.9'
+    const diveVersion = core.getInput('dive-version')
 
     const diveImage = `wagoodman/dive:${diveVersion}`
     await exec.exec('docker', ['pull', diveImage])
@@ -55,6 +55,8 @@ async function run(): Promise<void> {
     const commandOptions = [
       '-e',
       'CI=true',
+      '-e',
+      'DOCKER_API_VERSION=1.37',
       '--rm',
       '-v',
       '/var/run/docker.sock:/var/run/docker.sock'
